@@ -1,0 +1,34 @@
+name: Deploy to Railway
+
+on: 
+  workflow_call:
+    inputs:
+      service_name:
+        required: true
+        type: string
+      railway_environment:
+        required: true
+        type: string
+    secrets:
+      RAILWAY_TOKEN:
+        required: true
+        description: "Railway token for authentication"
+
+
+jobs:
+  deploy-to-railway:
+    name: Deploying ${{ inputs.railway_environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.railway_environment }}
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_SERVICE_NAME: ${{ inputs.service_name }}
+    container: ghcr.io/railwayapp/cli:latest     
+    steps:
+      - name: Checkout Self
+        uses: actions/checkout@v4
+
+      - name: deploy to environment - staging
+        run: |
+          railway up --service=${{ env.RAILWAY_SERVICE_NAME }}
+
