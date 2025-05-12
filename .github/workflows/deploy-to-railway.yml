@@ -1,4 +1,4 @@
-name: Deploy to Railway
+name: Railway Deployment
 
 on: 
   workflow_call:
